@@ -104,3 +104,6 @@
 [submodule "lib/psoc-edge/async-transfer"]
 	path = lib/psoc-edge/async-transfer
 	url = https://github.com/Infineon/async-transfer.git
+[submodule "lib/micropython-steami-lib"]
+	path = lib/micropython-steami-lib
+	url = https://github.com/steamicc/micropython-steami-lib.git
