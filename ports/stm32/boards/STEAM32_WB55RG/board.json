@@ -1,0 +1,15 @@
+{
+    "deploy": [
+        "../deploy.md"
+    ],
+    "docs": "",
+    "features": [],
+    "images": [
+        "STeaMi.jpg"
+    ],
+    "mcu": "stm32wb",
+    "product": "STeaMi",
+    "thumbnail": "",
+    "url": "https://www.steami.cc/",
+    "vendor": "STeaMi Educational Foundation"
+}
