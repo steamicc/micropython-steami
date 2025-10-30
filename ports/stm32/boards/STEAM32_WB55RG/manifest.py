@@ -11,9 +11,12 @@ require("aioble")
 # Register external library
 add_library("micropython-steami-lib", "$(STEAMI_LIB_DIR)")
 
-
+require("mcp23009e", library="micropython-steami-lib")
 require("ssd1327", library="micropython-steami-lib")
 require("apds9960", library="micropython-steami-lib")
 require("bq27441", library="micropython-steami-lib")
 require("hts221", library="micropython-steami-lib")
 require("vl53l1x", library="micropython-steami-lib")
+require("lis2mdl", library="micropython-steami-lib")
+require("wsen-hids", library="micropython-steami-lib")
+require("wsen-pads", library="micropython-steami-lib")
