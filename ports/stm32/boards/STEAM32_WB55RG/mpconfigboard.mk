@@ -25,3 +25,6 @@ STEAMI_LIB_DIR = lib/micropython-steami-lib
 GIT_SUBMODULES += $(STEAMI_LIB_DIR)
 FROZEN_MANIFEST = $(BOARD_DIR)/manifest.py
 MICROPY_MANIFEST_STEAMI_LIB_DIR = $(TOP)/$(STEAMI_LIB_DIR)
+# Freeze the Python modules with -O3 (no asserts, smaller bytecode) so that
+# the drivers and the steami package fit in the application flash.
+MPY_CROSS_FLAGS += -O3
