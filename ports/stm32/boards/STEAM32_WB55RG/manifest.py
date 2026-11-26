@@ -2,7 +2,6 @@ include("$(PORT_DIR)/boards/manifest.py")
 
 # Utils
 require("time")
-require("senml")
 require("logging")
 
 # Bluetooth
@@ -13,6 +12,7 @@ add_library("micropython-steami-lib", "$(STEAMI_LIB_DIR)")
 
 require("mcp23009e", library="micropython-steami-lib")
 require("ssd1327", library="micropython-steami-lib")
+require("gc9a01", library="micropython-steami-lib")
 require("apds9960", library="micropython-steami-lib")
 require("bq27441", library="micropython-steami-lib")
 require("vl53l1x", library="micropython-steami-lib")
