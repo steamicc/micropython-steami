@@ -22,6 +22,7 @@
     *(.text.UART*_IRQHandler)
     *(.text.USART*_IRQHandler)
     *(.text.LPUART*_IRQHandler)
+    *(.text.dma_idle_handler)
     *(.text.FLASH_PageErase)
     *(.text.FLASH_SectorErase)
     *(.text.FLASH_WaitForLastOperation)

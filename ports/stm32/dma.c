@@ -1657,19 +1657,21 @@ static void dma_idle_handler(uint32_t tick) {
         return;
     }
 
-    static const uint32_t controller_mask[] = {
-        DMA1_ENABLE_MASK,
-        #if defined(DMA2) || defined(GPDMA2)
-        DMA2_ENABLE_MASK,
-        #endif
-    };
     {
         int controller = (tick >> DMA_SYSTICK_LOG2) & 1;
         if (dma_idle.counter[controller] == 0) {
             return;
         }
+        // The mask is computed here rather than read from a const table, so
+        // that this function does not access flash when it runs from RAM.
+        uint32_t controller_mask = DMA1_ENABLE_MASK;
+        #if defined(DMA2) || defined(GPDMA2)
+        if (controller == 1) {
+            controller_mask = DMA2_ENABLE_MASK;
+        }
+        #endif
         if (++dma_idle.counter[controller] > DMA_IDLE_TICK_MAX) {
-            if ((dma_enable_mask & controller_mask[controller]) == 0) {
+            if ((dma_enable_mask & controller_mask) == 0) {
                 // Nothing is active and we've reached our idle timeout,
                 // Now we'll really disable the clock.
                 dma_idle.counter[controller] = 0;
