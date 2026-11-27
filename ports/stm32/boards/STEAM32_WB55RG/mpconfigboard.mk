@@ -7,11 +7,11 @@ OPENOCD_CONFIG = boards/STEAM32_WB55RG/openocd_steami.cfg
 
 ifeq ($(USE_MBOOT),1)
 # When using Mboot all the text goes together after the bootloader
-LD_FILES = boards/stm32wb55xg.ld boards/common_bl.ld
+LD_FILES = boards/STEAM32_WB55RG/stm32wb55xg_steami.ld boards/common_bl.ld
 TEXT0_ADDR = 0x08008000
 else
 # When not using Mboot the text goes at the start of flash
-LD_FILES = boards/stm32wb55xg.ld boards/common_basic.ld
+LD_FILES = boards/STEAM32_WB55RG/stm32wb55xg_steami.ld boards/common_basic.ld
 TEXT0_ADDR = 0x08000000
 endif
 
@@ -26,5 +26,6 @@ GIT_SUBMODULES += $(STEAMI_LIB_DIR)
 FROZEN_MANIFEST = $(BOARD_DIR)/manifest.py
 MICROPY_MANIFEST_STEAMI_LIB_DIR = $(TOP)/$(STEAMI_LIB_DIR)
 # Freeze the Python modules with -O3 (no asserts, smaller bytecode) so that
-# the drivers and the steami package fit in the application flash.
+# the drivers and the steami package fit in the 528 KB application flash
+# (see stm32wb55xg_steami.ld).
 MPY_CROSS_FLAGS += -O3

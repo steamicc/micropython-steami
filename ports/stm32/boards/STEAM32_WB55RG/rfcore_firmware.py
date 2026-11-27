@@ -108,13 +108,13 @@ _OBFUSCATION_KEY = const(0x0573B55AA)
 
 # On boards using the internal flash filesystem, this must match the
 # `_micropy_hw_internal_flash_storage_end` symbol defined by the linker script
-# (see eg boards/stm32wb55xg.ld).
+# (see boards/STEAM32_WB55RG/stm32wb55xg_steami.ld).
 # We erase everything from here until the start of the secure area (defined by
 # SFSA) just to ensure that no other fragments of firmware files are left
 # behind. On boards with external flash, this just needs to ensure that it
 # includes any regions that may contain partial firmware data.
 # This is non-const so it can be override.
-STAGING_AREA_START = 0x80C0000
+STAGING_AREA_START = 0x80C4000
 
 # First word of device info table indicating FUS state (returned by `stm.rfcore_status()`).
 _MAGIC_FUS_ACTIVE = const(0xA94656B9)  # AN5185
@@ -324,12 +324,19 @@ def _copy_file_to_flash(filename):
         # TODO add support for querying the correct flash size on chip
         addr = load_addr = addr_1m
 
+        # The image must lie in the staging area, between the end of the
+        # filesystem and the secure area (SFSA): an image whose install
+        # address is lower would be written over the filesystem, which is
+        # not erased.
+        sfr_sfsa = machine.mem32[stm.FLASH + stm.FLASH_SFR] & 0xFF
+        erase_limit = 0x08000000 + sfr_sfsa * 4096
+        if addr < STAGING_AREA_START or addr + os.stat(filename)[6] > erase_limit:
+            raise ValueError("image does not fit the staging area")
+
         log(f"Writing {src_filename} v{vers[0]}.{vers[1]}.{vers[2]} to addr: 0x{addr:x}")
 
         # Erase the entire staging area in flash.
         erase_addr = STAGING_AREA_START
-        sfr_sfsa = machine.mem32[stm.FLASH + stm.FLASH_SFR] & 0xFF
-        erase_limit = 0x08000000 + sfr_sfsa * 4096
         while erase_addr < erase_limit:
             flash.erase_page((erase_addr - 0x08000000) // 4096)
             erase_addr += 4096
